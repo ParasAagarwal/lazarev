@@ -38,7 +38,7 @@ function locomotiveAnimation() {
 //for revision read the documentation for gsap
 
 function loadingAnimation() {
-  var tl = gsap.timeline();//for maintaining the order
+  var tl = gsap.timeline(); //for maintaining the order
   tl.from("#page1", {
     opacity: 0,
     duration: 0.2,
@@ -173,7 +173,6 @@ function page3VideoAnimation() {
 
 page3VideoAnimation();
 
-// Page 6 animation for multiple sections with scroll-triggered animations
 function page6animation() {
   // Sections to animate
   const sections = [
@@ -186,15 +185,17 @@ function page6animation() {
   function handleScroll() {
     sections.forEach(({ sectionId, translateDataAttr }) => {
       const section = document.querySelector(sectionId);
+      if (!section) return;
+
       const elements = section.querySelectorAll("h4");
       const sectionRect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Define start and end points for animation trigger based on the viewport height
-      const start = 0.1 * windowHeight;  // Start animation when 10% of the section is in view
-      const end = 0.6 * windowHeight;    // End animation when 60% of the section is in view
+      // Define start and end points for animation trigger based on viewport height
+      const start = 0.1 * windowHeight; // Start animation when 10% of the section is in view
+      const end = 0.6 * windowHeight; // End animation when 60% of the section is in view
 
-      // Only animate when section is in the defined scroll range
+      // Check if the section is within the animation scroll range
       if (sectionRect.top < end && sectionRect.bottom > start) {
         // Calculate the progress as the section scrolls through the viewport
         const progress = Math.min(
@@ -202,16 +203,19 @@ function page6animation() {
           1
         );
 
+        // Log progress to verify section triggering
+        console.log(`Section: ${sectionId}, Progress: ${progress}`);
+
         // Animate each h4 element in the section
         elements.forEach((el) => {
           const maxTranslateX = parseFloat(el.getAttribute(translateDataAttr));
-          const translateX = maxTranslateX * progress;  // Calculate the translated value
+          const translateX = maxTranslateX * progress; // Calculate the translated value
 
           // Apply the transformation to each h4 element
           gsap.to(el, {
-            transform: `translateX(${translateX}%)`,  // Apply the calculated translation
-            ease: "power3.out",                       // Smooth easing
-            duration: 0.5,                            // Duration for smoothness
+            x: `${translateX}%`, // Adjusted translation to use `x` instead of `transform` for more direct GSAP control
+            ease: "power3.out", // Smooth easing
+            duration: 0.5, // Duration for smoothness
           });
         });
       }
@@ -227,6 +231,5 @@ function page6animation() {
 
 // Initialize page 6 animation
 page6animation();
-
 
 locomotiveAnimation();
